@@ -1,0 +1,29 @@
+{
+  "name": "cartogopher-navigator",
+  "version": "1.0.1",
+  "description": "API Navigator MCP Server — fetch, search, and query OpenAPI & GraphQL schemas with AI-optimized token-efficient output",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "cartogopher-navigator": "index.js"
+  },
+  "main": "./index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "yaml": "^2.7.1"
+  },
+  "keywords": [
+    "mcp",
+    "openapi",
+    "graphql",
+    "api",
+    "navigator",
+    "ai",
+    "claude",
+    "cursor",
+    "copilot"
+  ]
+}
