@@ -3,6 +3,9 @@
 // Standalone, free, pure Node.js — no Go binary required.
 // Fetch, search, and query OpenAPI & GraphQL schemas with AI-optimized output.
 
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
@@ -16,9 +19,12 @@ import { fetchSchema } from './lib/graphql-fetch.js';
 import { parseSchema } from './lib/graphql-parse.js';
 import * as gqlQuery from './lib/graphql-query.js';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(readFileSync(join(__dirname, 'package.json'), 'utf8'));
+
 const server = new McpServer({
   name: '@cartogopher/navigator',
-  version: '1.0.1',
+  version: pkg.version,
 });
 
 // ─── OpenAPI Tools ───────────────────────────────────────────────
