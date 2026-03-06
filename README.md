@@ -1,15 +1,46 @@
-# @cartogopher/navigator
+# Cartogopher Navigator
 
-**API Navigator MCP Server** — Fetch, search, and query OpenAPI & GraphQL schemas with AI-optimized, token-efficient output.
+[![npm version](https://img.shields.io/npm/v/cartogopher-navigator.svg)](https://www.npmjs.com/package/cartogopher-navigator)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 
-Free, standalone, pure Node.js. No Go binary required.
+**External API Intelligence for AI agents** -- An MCP server that fetches, parses, and queries OpenAPI and GraphQL schemas, giving your AI assistant structured, token-efficient access to any external API.
+
+> **Part of Cartogopher** -- This is a free, open-source module from [Cartogopher](https://cartogopher.com), a leading code intelligence tool built in Go and C that saves 40-80% on AI tokens. While the core Cartogopher platform provides deep codebase understanding and intelligent context retrieval, Navigator handles the external API side -- it grabs OpenAPI specs and GraphQL schemas so your AI agent can explore and understand third-party APIs without burning through your context window. This is a standalone Node.js port, available as an npm package for easy integration into any MCP-compatible workflow.
+
+---
+
+## Quick Start
+
+### Install from npm
+
+```bash
+npx cartogopher-navigator
+```
+
+### Or clone from source
+
+```bash
+git clone https://github.com/Cartogopher-ai/Cartogopher-Navigator.git
+cd Cartogopher-Navigator
+npm install
+node index.js
+```
+
+---
 
 ## Setup
 
 ### Claude Code
 
 ```bash
-claude mcp add navigator -- node /path/to/navigator-mcp/index.js
+claude mcp add navigator -- npx cartogopher-navigator
+```
+
+Or from a local clone:
+
+```bash
+claude mcp add navigator -- node /path/to/Cartogopher-Navigator/index.js
 ```
 
 ### Claude Desktop
@@ -20,8 +51,8 @@ Add to `claude_desktop_config.json`:
 {
   "mcpServers": {
     "navigator": {
-      "command": "node",
-      "args": ["/path/to/navigator-mcp/index.js"]
+      "command": "npx",
+      "args": ["cartogopher-navigator"]
     }
   }
 }
@@ -35,39 +66,39 @@ Add to `.cursor/mcp.json`:
 {
   "mcpServers": {
     "navigator": {
-      "command": "node",
-      "args": ["/path/to/navigator-mcp/index.js"]
+      "command": "npx",
+      "args": ["cartogopher-navigator"]
     }
   }
 }
 ```
 
-### From npm (once published)
-
-```bash
-npx @cartogopher/navigator
-```
+---
 
 ## Tools
 
-### OpenAPI (4 tools)
+### OpenAPI
 
 | Tool | Description |
 |------|-------------|
 | `navigator_fetch` | Fetch and parse an OpenAPI spec by URL (JSON or YAML) |
 | `navigator_list` | List all fetched specs with stats |
-| `navigator_search` | Search endpoints across specs (path, operationId, summary, tags) |
+| `navigator_search` | Search endpoints across specs by path, operationId, summary, or tags |
 | `navigator_endpoint` | Detailed endpoint view with inlined schema fields |
+| `navigator_delete` | Remove a stored OpenAPI spec |
 
-### GraphQL (5 tools)
+### GraphQL
 
 | Tool | Description |
 |------|-------------|
-| `gqlnav_fetch` | Fetch a GraphQL schema (introspection or SDL file) |
+| `gqlnav_fetch` | Fetch a GraphQL schema via introspection or SDL file |
 | `gqlnav_list` | List all fetched schemas with stats |
-| `gqlnav_search` | Search types, operations, enums across schemas |
+| `gqlnav_search` | Search types, operations, and enums across schemas |
 | `gqlnav_type` | Detailed type/input/enum/query/mutation view with inlined fields |
 | `gqlnav_summary` | High-level schema overview |
+| `gqlnav_delete` | Remove a stored GraphQL schema |
+
+---
 
 ## Usage Examples
 
@@ -83,7 +114,8 @@ Fetched and parsed: swagger-petstore-openapi-3-0
 > navigator_search query="pet"
 Found 10 endpoints:
 [swagger-petstore-openapi-3-0] POST /pet [addPet] Add a new pet to the store. | req: Pet | res: Pet
-[swagger-petstore-openapi-3-0] GET /pet/findByStatus [findPetsByStatus] Finds Pets by status. | params: status(q,str(available|pending|sold)) | res: arr[Pet]
+[swagger-petstore-openapi-3-0] GET /pet/findByStatus [findPetsByStatus] Finds Pets by status.
+  | params: status(q,str(available|pending|sold)) | res: arr[Pet]
 ...
 
 > navigator_endpoint spec="swagger-petstore-openapi-3-0" path="/pet/{petId}" method="GET"
@@ -140,24 +172,32 @@ type Pokemon
   ...
 ```
 
+---
+
 ## Storage
 
-Fetched specs are stored locally:
-- OpenAPI: `~/.cartogopher/navigator/api/`
-- GraphQL: `~/.cartogopher/navigator/graphql/`
+Fetched specs are stored locally at `~/.cartogopher/navigator/`:
 
-Each spec is stored as a compact JSON file. Re-fetching the same spec overwrites the previous version.
+- **OpenAPI:** `~/.cartogopher/navigator/api/`
+- **GraphQL:** `~/.cartogopher/navigator/graphql/`
+
+Each spec is stored as a compact JSON file. Re-fetching the same spec overwrites the previous version. Use `navigator_delete` or `gqlnav_delete` to remove stored specs.
+
+## Token Efficiency
+
+Output is designed for AI consumption -- compact, structured, no filler:
+
+- **Abbreviated locations:** `q`=query, `p`=path, `h`=header, `c`=cookie
+- **Compact types:** `str`, `int`, `num`, `bool`, `arr[T]`, `obj`
+- **Inline enums:** `str(available|pending|sold)`
+- **Inlined schemas:** Fields shown directly in endpoint/type detail views
+- **Abbreviated keys:** GraphQL types use `n`=name, `t`=type, `f`=fields, `d`=description
 
 ## Requirements
 
 - Node.js 18+
-- No other dependencies required (pure Node.js with `yaml` for YAML parsing and `@modelcontextprotocol/sdk` for MCP protocol)
+- Two runtime dependencies: [`yaml`](https://www.npmjs.com/package/yaml) and [`@modelcontextprotocol/sdk`](https://www.npmjs.com/package/@modelcontextprotocol/sdk)
 
-## Token Efficiency
+## License
 
-Output is designed for AI consumption — compact, structured, no filler:
-- Abbreviated parameter locations: `q`=query, `p`=path, `h`=header, `c`=cookie
-- Compact types: `str`, `int`, `num`, `bool`, `arr[T]`, `obj`
-- Enum values inline: `str(available|pending|sold)`
-- Schema fields inlined directly in endpoint detail views
-- GraphQL types use abbreviated JSON keys: `n`=name, `t`=type, `f`=fields, `d`=description
+MIT -- see [LICENSE](./LICENSE) for details.

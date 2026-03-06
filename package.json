@@ -1,29 +1,52 @@
 {
   "name": "cartogopher-navigator",
   "version": "1.0.1",
-  "description": "API Navigator MCP Server — fetch, search, and query OpenAPI & GraphQL schemas with AI-optimized token-efficient output",
+  "description": "External API intelligence for AI agents — an MCP server that fetches, parses, and queries OpenAPI & GraphQL schemas with token-efficient output",
   "license": "MIT",
   "type": "module",
   "bin": {
     "cartogopher-navigator": "index.js"
   },
   "main": "./index.js",
+  "files": [
+    "index.js",
+    "lib/",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "node index.js"
+  },
   "engines": {
     "node": ">=18"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cartogopher-ai/Cartogopher-Navigator.git"
+  },
+  "homepage": "https://github.com/Cartogopher-ai/Cartogopher-Navigator#readme",
+  "bugs": {
+    "url": "https://github.com/Cartogopher-ai/Cartogopher-Navigator/issues"
+  },
+  "author": "Cartogopher <jakenesler@gmail.com>",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
     "yaml": "^2.7.1"
   },
   "keywords": [
     "mcp",
+    "model-context-protocol",
     "openapi",
     "graphql",
     "api",
     "navigator",
+    "schema",
+    "introspection",
     "ai",
     "claude",
     "cursor",
-    "copilot"
+    "copilot",
+    "token-efficient",
+    "cartogopher"
   ]
 }

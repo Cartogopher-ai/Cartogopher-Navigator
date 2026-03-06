@@ -1,0 +1,8 @@
+.git/
+.github/
+.dist/
+node_modules/
+.npmrc
+.gitattributes
+opencode.jsonc
+package-lock.json
